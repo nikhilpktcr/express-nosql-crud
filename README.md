@@ -42,8 +42,8 @@ npm start
 
 ### End-Points
 
-GET /products : Retrieve all products
-GET /products/:id : Retrieve a specific product by ID
-POST /products : Create a new product
-PUT /products/:id : Update an existing product by ID
-DELETE /products/:id : Delete a product by ID
+1. GET /products : Retrieve all products
+2. GET /products/:id : Retrieve a specific product by ID
+3. POST /products : Create a new product
+4. PUT /products/:id : Update an existing product by ID
+5. DELETE /products/:id : Delete a product by ID
