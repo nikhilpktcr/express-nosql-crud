@@ -1,6 +1,6 @@
 import { jest } from "@jest/globals";
 import request from "supertest";
-import express, { response } from "express";
+import express from "express";
 import {
   addProduct,
   getAllProducts,
@@ -30,8 +30,45 @@ describe(`Product Controller`, () => {
     const response = await request(app)
       .post("/products")
       .send(mockProduct)
-      .expect(response.status)
-      .toBe(201);
+      .expect(201);
     expect(response.body.data).toEqual(mockProduct);
+  });
+
+  test("GET /products", async () => {
+    const products = [mockProduct];
+    getAllProducts.mockResolvedValue(products);
+    const response = await request(app)
+      .get("/products")
+      .send(products)
+      .expect(200);
+
+    expect(response.body.data).toEqual(products);
+    expect(response.body.data[0]).toMatchObject(mockProduct);
+  });
+  test("GET /products/:id", async () => {
+    getOneProduct.mockResolvedValue(mockProduct);
+    const response = await request(app)
+      .get(`/products/${mockProduct._id}`)
+      .send(mockProduct)
+      .expect(200);
+    expect(response.body.data).toEqual(mockProduct);
+  });
+
+  test("PUT /products/:id", async () => {
+    const updatedProduct = { ...mockProduct, name: "test updated" };
+    updateProduct.mockResolvedValue(updatedProduct);
+    const response = await request(app)
+      .put(`/products/${mockProduct._id}`)
+      .send({ name: "test updated" })
+      .expect(200);
+    expect(response.body.data.name).toBe("test updated");
+  });
+
+  test("DELETE /products/:id", async () => {
+    removeProduct.mockResolvedValue(true);
+    const response = await request(app)
+      .delete(`/products/${mockProduct._id}`)
+      .expect(200);
+    expect(response.body.data).toBe(true);
   });
 });
