@@ -41,9 +41,10 @@ export const updateProduct = async (id, body) => {
       updateData.price = body.price;
     }
 
-    await Product.findByIdAndUpdate(id, updateData);
-    const product = await Product.findById(id);
-    return product;
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+    return updatedProduct;
   } catch (error) {
     throw new Error("Failed to update product");
   }
@@ -53,9 +54,12 @@ export const removeProduct = async (id) => {
   try {
     const productDetails = await Product.findById(id);
     if (!productDetails) {
-      throw new Error("product not found");
+      throw new Error("Product not found");
     }
-    await Product.findByIdAndDelete(req.params.id);
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    if (!deletedProduct) {
+      throw new Error("Failed to delete product");
+    }
     return true;
   } catch (error) {
     throw new Error("Failed to delete product");
